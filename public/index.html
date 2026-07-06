@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GetKey - Quản lý key & chia sẻ code</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <i class="fa-solid fa-key"></i>
+      <h1>GetKey</h1>
+      <p class="tagline">Quản lý key &amp; chia sẻ code/file</p>
+    </div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tabLoginBtn">Đăng nhập</div>
+      <div class="auth-tab" id="tabRegisterBtn">Đăng ký</div>
+    </div>
+
+    <form id="loginForm" autocomplete="on">
+      <div class="field">
+        <label>Tên đăng nhập</label>
+        <input type="text" id="loginUser" placeholder="Nhập tên đăng nhập" autocomplete="username">
+      </div>
+      <div class="field">
+        <label>Mật khẩu</label>
+        <input type="password" id="loginPass" placeholder="Nhập mật khẩu" autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn-main"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</button>
+      <div class="auth-error" id="loginError"></div>
+    </form>
+
+    <form id="registerForm" class="hidden" autocomplete="on">
+      <div class="field">
+        <label>Tên đăng nhập</label>
+        <input type="text" id="regUser" placeholder="Nhập tên đăng nhập" autocomplete="username">
+      </div>
+      <div class="field">
+        <label>Mật khẩu</label>
+        <input type="password" id="regPass" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label>Xác nhận mật khẩu</label>
+        <input type="password" id="regPass2" placeholder="Nhập lại mật khẩu" autocomplete="new-password">
+      </div>
+      <button type="submit" class="btn-main"><i class="fa-solid fa-user-plus"></i> Đăng ký</button>
+      <div class="auth-error" id="regError"></div>
+    </form>
+  </div>
+</div>
+
+<div id="appScreen" class="hidden">
+  <header class="top">
+    <div class="logo"><i class="fa-solid fa-key"></i> GetKey</div>
+    <div class="user-area">
+      <span id="userLabel"><i class="fa-regular fa-user"></i></span>
+      <button id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="active" data-tab="generate"><i class="fa-solid fa-dice"></i> Tạo key</button>
+    <button data-tab="paste"><i class="fa-solid fa-code"></i> Paste / Upload</button>
+    <button data-tab="history"><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử</button>
+  </nav>
+
+  <!-- GENERATE TAB -->
+  <section id="tab-generate" class="panel">
+    <h2><i class="fa-solid fa-dice"></i> Tạo key mới</h2>
+    <div class="row-input">
+      <select id="durationSelect">
+        <option value="3600000">1 giờ</option>
+        <option value="21600000">6 giờ</option>
+        <option value="43200000">12 giờ</option>
+        <option value="86400000" selected>24 giờ</option>
+        <option value="259200000">3 ngày</option>
+        <option value="604800000">7 ngày</option>
+        <option value="2592000000">30 ngày</option>
+      </select>
+      <button id="generateBtn"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo key</button>
+    </div>
+
+    <div class="key-display" id="genResult">
+      <div class="key-row">
+        <input type="text" id="genKeyValue" readonly>
+        <button class="copy-btn" data-copy-target="genKeyValue"><i class="fa-regular fa-copy"></i> Copy</button>
+      </div>
+      <div class="info-grid">
+        <div>Thời hạn: <span id="genDurationLabel"></span></div>
+        <div>Trạng thái: <span style="color:var(--ok);font-weight:700">Còn hiệu lực</span></div>
+        <div style="grid-column:1/-1">Hết hạn lúc: <span id="genExpiryLabel"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PASTE / UPLOAD TAB -->
+  <section id="tab-paste" class="panel hidden">
+    <h2><i class="fa-solid fa-code"></i> Paste code hoặc upload file</h2>
+
+    <div class="mode-switch">
+      <button class="mode-btn active" data-mode="code"><i class="fa-solid fa-code"></i> Dán code</button>
+      <button class="mode-btn" data-mode="file"><i class="fa-solid fa-file-arrow-up"></i> Upload file</button>
+    </div>
+
+    <div id="modeCode">
+      <div class="field">
+        <label>Tên file (tùy chọn)</label>
+        <input type="text" id="codeFilename" placeholder="vd: script.js">
+      </div>
+      <div class="field">
+        <label>Nội dung code</label>
+        <textarea id="codeContent" rows="10" placeholder="Dán code vào đây..."></textarea>
+      </div>
+    </div>
+
+    <div id="modeFile" class="hidden">
+      <div class="field">
+        <label>Chọn file</label>
+        <input type="file" id="fileInput">
+      </div>
+      <p class="hint">Tối đa 8MB mỗi file.</p>
+    </div>
+
+    <div class="field">
+      <label>Ghi chú (tùy chọn)</label>
+      <input type="text" id="pasteNote" placeholder="vd: bản build v1.2">
+    </div>
+
+    <button class="btn-main" id="saveBtn"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+
+    <div class="key-display" id="pasteResult">
+      <p class="result-label">Link raw công khai:</p>
+      <div class="key-row">
+        <input type="text" id="pasteRawUrl" readonly>
+        <button class="copy-btn" data-copy-target="pasteRawUrl"><i class="fa-regular fa-copy"></i> Copy</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORY TAB -->
+  <section id="tab-history" class="panel hidden">
+    <h2><i class="fa-solid fa-key"></i> Key đã tạo</h2>
+    <div id="keyHistoryList"></div>
+
+    <h2 style="margin-top:26px;"><i class="fa-solid fa-code"></i> Code / File đã lưu</h2>
+    <div id="pasteHistoryList"></div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>
