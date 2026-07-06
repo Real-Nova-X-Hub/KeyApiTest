@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Get Key - NovaXHub</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 40px 35px 35px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
+            animation: rotateGlow 20s linear infinite;
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .logo {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 8px;
+        }
+
+        .logo .icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .logo h1 {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .logo .sub {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .ip-display {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin: 20px 0 18px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .ip-display .label {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .ip-display .ip-value {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+
+        .ip-display .ip-value.loading {
+            color: rgba(255, 255, 255, 0.2);
+            font-weight: 400;
+            font-family: 'Segoe UI', sans-serif;
+            animation: pulseText 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        .ip-display .ip-value.matched {
+            color: #64ffda;
+        }
+
+        .ip-display .ip-value.error {
+            color: #ff6b6b;
+        }
+
+        .ip-display .ip-value.changed {
+            color: #ffc107;
+            animation: pulseIP 1s ease-in-out;
+        }
+
+        @keyframes pulseIP {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .key-section {
+            position: relative;
+            z-index: 1;
+            margin: 10px 0 20px;
+            padding: 30px 20px;
+            background: rgba(100, 255, 218, 0.04);
+            border-radius: 16px;
+            border: 1px solid rgba(100, 255, 218, 0.08);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: 0.5s;
+        }
+
+        .key-section.loading {
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .key-section .label {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .key-section .key-value {
+            color: #64ffda;
+            font-size: 28px;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            word-break: break-all;
+            transition: 0.3s;
+        }
+
+        .key-section .key-value.loading-text {
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 16px;
+            font-weight: 400;
+            font-family: 'Segoe UI', sans-serif;
+            animation: pulseText 1.5s ease-in-out infinite;
+        }
+
+        .key-section .expire-info {
+            color: rgba(255, 255, 255, 0.25);
+            font-size: 13px;
+            margin-top: 10px;
+            font-weight: 300;
+        }
+
+        .key-section .expire-info strong {
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+        }
+
+        .key-section .note {
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 12px;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        .status {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .status .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .status .dot.online {
+            background: #64ffda;
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
+        }
+
+        .status .dot.loading {
+            background: #ffc107;
+            box-shadow: 0 0 15px rgba(255, 193, 7, 0.2);
+            animation: pulseDot 1s ease-in-out infinite;
+        }
+
+        .status .dot.error {
+            background: #ff6b6b;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.2);
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 0.4; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .status .status-text {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .status .status-text.online {
+            color: rgba(100, 255, 218, 0.6);
+        }
+
+        .status .status-text.error {
+            color: rgba(255, 107, 107, 0.6);
+        }
+
+        .btn-group {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.95);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.95);
+        }
+
+        .footer {
+            position: relative;
+            z-index: 1;
+            margin-top: 22px;
+            color: rgba(255, 255, 255, 0.06);
+            font-size: 11px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            padding-top: 16px;
+            letter-spacing: 0.3px;
+        }
+
+        .key-section.error {
+            border-color: rgba(255, 107, 107, 0.15);
+            background: rgba(255, 107, 107, 0.03);
+        }
+
+        .key-section.error .key-value {
+            color: #ff6b6b;
+            font-size: 18px;
+            font-weight: 400;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .key-section .key-value.whitelist {
+            color: #ffc107;
+        }
+
+        /* Blocked Overlay */
+        .blocked-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .blocked-overlay.show {
+            display: flex;
+        }
+
+        .blocked-overlay .icon {
+            font-size: 80px;
+            margin-bottom: 16px;
+        }
+
+        .blocked-overlay h1 {
+            color: #ff6b6b;
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .blocked-overlay p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .blocked-overlay .btn-reset {
+            margin-top: 25px;
+            padding: 14px 40px;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .blocked-overlay .btn-reset:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 28px 18px 24px;
+            }
+            .key-section .key-value {
+                font-size: 20px;
+            }
+            .logo .icon {
+                font-size: 36px;
+            }
+            .logo h1 {
+                font-size: 20px;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BLOCKED OVERLAY - Referrer không hợp lệ -->
+    <div class="blocked-overlay" id="blockedOverlay">
+        <div class="icon">⛔</div>
+        <h1>Anti Lazy</h1>
+        <p>Access denied</p>
+    </div>
+
+    <!-- BLOCKED OVERLAY - DevTools -->
+    <div class="blocked-overlay" id="devtoolsOverlay" style="display:none;">
+        <div class="icon">🚫</div>
+        <h1>⚠️ DevTools Detected</h1>
+        <p>Please close DevTools (F12) and reload the page to continue.</p>
+        <button class="btn-reset" id="resetBtn">🔄 Reload Page</button>
+    </div>
+
+    <!-- BLOCKED OVERLAY - View Source -->
+    <div class="blocked-overlay" id="viewSourceOverlay" style="display:none;">
+        <div class="icon">🔍</div>
+        <h1>⛔ View Source Blocked</h1>
+        <p>This page does not allow viewing source code.</p>
+        <button class="btn-reset" id="viewSourceResetBtn">🔄 Reload Page</button>
+    </div>
+
+    <div class="container" id="app">
+        <div class="logo">
+            <span class="icon">🔑</span>
+            <h1>AuraHub Key</h1>
+            <div class="sub">Auto get key</div>
+        </div>
+
+        <div class="ip-display">
+            <span class="label">🌐 Your IP</span>
+            <span class="ip-value loading" id="ipDisplay">Getting IP...</span>
+        </div>
+
+        <div class="key-section loading" id="keySection">
+            <div class="label">🔐 KEY</div>
+            <div class="key-value loading-text" id="keyDisplay">Getting key...</div>
+            <div class="expire-info" id="expireDisplay"></div>
+            <div class="note" id="noteDisplay"></div>
+        </div>
+
+        <div class="status">
+            <span class="dot loading" id="statusDot"></span>
+            <span class="status-text" id="statusText">Initializing...</span>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-primary" id="getKeyBtn">🚀 Get Key</button>
+            <button class="btn btn-secondary" id="refreshBtn">↻ Refresh</button>
+        </div>
+
+        <div class="footer">AuraHub Key Manager · Onthitracnghiem.com</div>
+    </div>
+
+    <script>
+        // ================================================================
+        // 🔒 KIỂM TRA REFERRER - CHỈ NHẬN CHUYỂN HƯỚNG TỪ onthitracnghiem.com
+        // ================================================================
+        (function checkReferrer() {
+            const referrer = document.referrer || '';
+            const allowedReferrer = 'https://onthitracnghiem.com';
+            
+            // Chuẩn hóa: bỏ dấu / cuối
+            const cleanReferrer = referrer.replace(/\/+$/, '');
+            const cleanAllowed = allowedReferrer.replace(/\/+$/, '');
+            
+            // Kiểm tra referrer có bắt đầu bằng allowed không
+            if (!cleanReferrer.startsWith(cleanAllowed)) {
+                // Ẩn nội dung
+                const app = document.getElementById('app');
+                if (app) {
+                    app.style.display = 'none';
+                }
+                
+                // Hiển thị overlay bị chặn
+                const overlay = document.getElementById('blockedOverlay');
+                if (overlay) {
+                    overlay.classList.add('show');
+                }
+                
+                // Xóa console
+                console.clear();
+                console.log('⛔ Access denied. Referrer:', referrer || '(none)');
+                console.log('✅ Allowed:', allowedReferrer);
+                return;
+            }
+            
+            console.log('✅ Valid referrer:', referrer);
+        })();
+
+        // ================================================================
+        // 🔒 BLOCK VIEW-SOURCE
+        // ================================================================
+        (function blockViewSource() {
+            if (window.location.protocol === 'view-source:' || 
+                window.location.href.startsWith('view-source:')) {
+                document.body.innerHTML = '';
+                document.body.style.background = '#0a0a0f';
+                const overlay = document.getElementById('viewSourceOverlay');
+                if (overlay) {
+                    overlay.style.display = 'flex';
+                }
+                console.clear();
+                return;
+            }
+
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && (e.key === 'u' || e.key === 'U')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const overlay = document.getElementById('viewSourceOverlay');
+                    if (overlay) {
+                        overlay.style.display = 'flex';
+                    }
+                    const app = document.getElementById('app');
+                    if (app) {
+                        app.innerHTML = '';
+                        app.style.display = 'none';
+                    }
+                    console.clear();
+                    return false;
+                }
+            }, true);
+
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            document.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' || e.keyCode === 123) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const overlay = document.getElementById('devtoolsOverlay');
+                    if (overlay) {
+                        overlay.style.display = 'flex';
+                    }
+                    console.clear();
+                    return false;
+                }
+            }, true);
+
+            document.getElementById('viewSourceResetBtn').addEventListener('click', function() {
+                location.reload();
+            });
+
+            console.log('🔒 View-Source protection enabled');
+        })();
+
+        // ================================================================
+        // 🛡️ ANTI-DEVTOOLS
+        // ================================================================
+        (function antiDevTools() {
+            function isDevToolsOpen() {
+                const threshold = 160;
+                const widthDiff = window.outerWidth - window.innerWidth;
+                const heightDiff = window.outerHeight - window.innerHeight;
+                if (widthDiff > threshold || heightDiff > threshold) {
+                    return true;
+                }
+
+                const element = document.createElement('div');
+                element.style.cssText = 'position:fixed;top:0;left:0;width:100px;height:100px;z-index:-9999;';
+                document.body.appendChild(element);
+                const rect = element.getBoundingClientRect();
+                const isHidden = rect.width === 0 || rect.height === 0;
+                document.body.removeChild(element);
+                if (isHidden) {
+                    return true;
+                }
+
+                try {
+                    const start = performance.now();
+                    debugger;
+                    const end = performance.now();
+                    if (end - start > 100) {
+                        return true;
+                    }
+                } catch (e) {}
+
+                return false;
+            }
+
+            function wipeContent() {
+                if (window._isBlocked) return;
+                window._isBlocked = true;
+                
+                const app = document.getElementById('app');
+                if (app) {
+                    app.innerHTML = '';
+                    app.style.display = 'none';
+                }
+                
+                const styles = document.querySelectorAll('style');
+                styles.forEach(s => s.remove());
+                
+                const head = document.head;
+                while (head.firstChild) {
+                    head.removeChild(head.firstChild);
+                }
+                
+                const title = document.createElement('title');
+                title.textContent = '⚠️ DevTools Detected';
+                document.head.appendChild(title);
+                
+                document.body.innerHTML = '';
+                
+                const overlay = document.getElementById('devtoolsOverlay');
+                if (overlay) {
+                    overlay.style.display = 'flex';
+                }
+                
+                console.clear();
+                
+                document.addEventListener('keydown', (e) => e.preventDefault());
+                document.addEventListener('click', (e) => e.preventDefault());
+                document.addEventListener('contextmenu', (e) => e.preventDefault());
+            }
+
+            if (isDevToolsOpen()) {
+                wipeContent();
+                return;
+            }
+
+            function detectF12(e) {
+                if (window._isBlocked) return;
+                
+                if (e.key === 'F12' || e.keyCode === 123) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    wipeContent();
+                    return false;
+                }
+                
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    wipeContent();
+                    return false;
+                }
+                
+                if ((e.ctrlKey || e.metaKey) && e.key === 'u') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    wipeContent();
+                    return false;
+                }
+                
+                if (e.metaKey && e.altKey && (e.key === 'i' || e.key === 'j' || e.key === 'c')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    wipeContent();
+                    return false;
+                }
+            }
+
+            function blockContextMenu(e) {
+                if (window._isBlocked) return;
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            function blockDefault(e) {
+                if (window._isBlocked) return;
+                e.preventDefault();
+                return false;
+            }
+
+            function startPeriodicCheck() {
+                setInterval(() => {
+                    if (window._isBlocked) return;
+                    if (isDevToolsOpen()) {
+                        wipeContent();
+                    }
+                }, 200);
+            }
+
+            document.addEventListener('keydown', detectF12, true);
+            document.addEventListener('contextmenu', blockContextMenu);
+            document.addEventListener('dragstart', blockDefault);
+            document.addEventListener('copy', blockDefault);
+            document.addEventListener('cut', blockDefault);
+            document.addEventListener('paste', blockDefault);
+            document.addEventListener('selectstart', blockDefault);
+            document.addEventListener('mousedown', (e) => {
+                if (e.button === 2) {
+                    e.preventDefault();
+                }
+            });
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', startPeriodicCheck);
+            } else {
+                startPeriodicCheck();
+            }
+
+            document.getElementById('resetBtn').addEventListener('click', function() {
+                location.reload();
+            });
+
+            console.log('🔒 Anti-DevTools: Instant detection enabled (200ms)');
+        })();
+
+        // ================================================================
+        // 📌 SETTINGS
+        // ================================================================
+        const SETTINGS = {
+            API_BASE: 'https://api-key-manager-5y84.onrender.com',
+            IP_SERVICE: 'ipify',
+            CHECK_INTERVAL: 5,
+            ACCESS_ENDPOINT: '/api/access',
+            REQUEST_ENDPOINT: '/api/request',
+            DEBUG: true
+        };
+
+        // ================================================================
+        // MAIN LOGIC
+        // ================================================================
+        const API_BASE = SETTINGS.API_BASE;
+        const API_ACCESS = API_BASE + SETTINGS.ACCESS_ENDPOINT;
+        const API_REQUEST = API_BASE + SETTINGS.REQUEST_ENDPOINT;
+        const CHECK_INTERVAL = SETTINGS.CHECK_INTERVAL * 1000;
+
+        function getIPUrl() {
+            const services = {
+                'ipify': 'https://api.ipify.org/',
+                'checkip': 'https://checkip.amazonaws.com/',
+                'myip': 'https://api.my-ip.io/ip'
+            };
+            return services[SETTINGS.IP_SERVICE] || services['ipify'];
+        }
+
+        const ipDisplay = document.getElementById('ipDisplay');
+        const keyDisplay = document.getElementById('keyDisplay');
+        const expireDisplay = document.getElementById('expireDisplay');
+        const noteDisplay = document.getElementById('noteDisplay');
+        const keySection = document.getElementById('keySection');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const getKeyBtn = document.getElementById('getKeyBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+
+        let currentIP = '';
+        let currentAccessKey = 'AuraHub-Access-RQXNZS17ZCNWE3Zrm60imem717qrtr{:68;?#\u003C\u003C87;#8?}EAa;hk_Qh*4K0LN0m/jqh)F{o!*XEl:m!bmqzaz78ks18vdksh';
+        let lastCheckedIP = '';
+
+        // ================================================================
+        // UTILITY FUNCTIONS
+        // ================================================================
+        function setStatus(text, type) {
+            statusText.textContent = text;
+            if (type === 'online') {
+                statusDot.className = 'dot online';
+                statusText.className = 'status-text online';
+            } else if (type === 'loading') {
+                statusDot.className = 'dot loading';
+                statusText.className = 'status-text';
+            } else if (type === 'error') {
+                statusDot.className = 'dot error';
+                statusText.className = 'status-text error';
+            } else {
+                statusDot.className = 'dot loading';
+                statusText.className = 'status-text';
+            }
+        }
+
+        function setKey(key, expire, note, type) {
+            keySection.className = 'key-section';
+            keyDisplay.className = 'key-value';
+            keyDisplay.textContent = key || 'No key';
+            if (type === 'whitelist') {
+                keyDisplay.classList.add('whitelist');
+            }
+            expireDisplay.innerHTML = expire || '';
+            noteDisplay.textContent = note || '';
+        }
+
+        function setLoading() {
+            keySection.className = 'key-section loading';
+            keyDisplay.className = 'key-value loading-text';
+            keyDisplay.textContent = 'Getting key...';
+            expireDisplay.innerHTML = '';
+            noteDisplay.textContent = '';
+        }
+
+        function setError(message) {
+            keySection.className = 'key-section error';
+            keyDisplay.className = 'key-value';
+            keyDisplay.textContent = '⚠️ ' + message;
+            expireDisplay.innerHTML = '';
+            noteDisplay.textContent = '';
+        }
+
+        function setIP(ip, changed = false) {
+            currentIP = ip;
+            ipDisplay.textContent = ip;
+            if (changed) {
+                ipDisplay.className = 'ip-value changed';
+                setStatus('🔄 IP changed, updating...', 'loading');
+                setTimeout(() => {
+                    ipDisplay.className = 'ip-value matched';
+                }, 1500);
+            } else {
+                ipDisplay.className = 'ip-value matched';
+            }
+        }
+
+        // ================================================================
+        // FETCH IP
+        // ================================================================
+        async function fetchIP(force = false) {
+            try {
+                const ipUrl = getIPUrl();
+                const response = await fetch(ipUrl);
+                const ip = await response.text();
+                const newIP = ip.trim();
+                
+                if (lastCheckedIP && lastCheckedIP !== newIP && !force) {
+                    if (SETTINGS.DEBUG) console.log(`🔄 IP changed: ${lastCheckedIP} → ${newIP}`);
+                    setIP(newIP, true);
+                    lastCheckedIP = newIP;
+                    return newIP;
+                }
+                
+                setIP(newIP, false);
+                lastCheckedIP = newIP;
+                return newIP;
+            } catch (error) {
+                console.error('Failed to get IP:', error);
+                ipDisplay.textContent = '❌ Failed to get IP';
+                ipDisplay.className = 'ip-value error';
+                return null;
+            }
+        }
+
+        // ================================================================
+        // FETCH ACCESS KEY
+        // ================================================================
+        async function fetchAccessKey() {
+            try {
+                const response = await fetch(API_ACCESS, {
+                    method: 'GET',
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.success && data.data && data.data.access_key) {
+                    currentAccessKey = data.data.access_key;
+                    if (SETTINGS.DEBUG) {
+                        console.log('✅ New access key obtained (length:', currentAccessKey.length, 'chars)');
+                    }
+                    return currentAccessKey;
+                } else {
+                    throw new Error(data.message || 'Failed to get Access Key');
+                }
+            } catch (error) {
+                console.error('Failed to get Access Key:', error);
+                return null;
+            }
+        }
+
+        // ================================================================
+        // FETCH MAIN KEY
+        // ================================================================
+        async function fetchKey(forceRefresh = false) {
+            const newIP = await fetchIP(forceRefresh);
+            if (!newIP) {
+                setError('Cannot get IP');
+                setStatus('❌ IP Error', 'error');
+                return;
+            }
+
+            if (forceRefresh || !currentAccessKey) {
+                setStatus('Getting new access key...', 'loading');
+                await fetchAccessKey();
+            }
+
+            if (!currentAccessKey) {
+                setError('Cannot get Access Key');
+                setStatus('❌ Access Key Error', 'error');
+                return;
+            }
+
+            setLoading();
+            setStatus('Getting key...', 'loading');
+            getKeyBtn.textContent = '⏳ Loading...';
+            getKeyBtn.disabled = true;
+
+            try {
+                const url = `${API_REQUEST}?access_key=${encodeURIComponent(currentAccessKey)}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    let errorMsg = `HTTP ${response.status}`;
+                    try {
+                        const json = JSON.parse(errorText);
+                        errorMsg = json.message || json.error || errorMsg;
+                    } catch (e) {}
+                    throw new Error(errorMsg);
+                }
+
+                const data = await response.json();
+
+                if (data.success && data.data) {
+                    const keyData = data.data;
+                    let expireText = '';
+                    if (keyData.expire_after) {
+                        expireText = `⏱ Expires in: <strong>${keyData.expire_after}</strong>`;
+                    } else if (keyData.expires_in) {
+                        expireText = `⏱ Expires in: <strong>${keyData.expires_in}</strong>`;
+                    }
+
+                    let note = keyData.note || '';
+                    let type = '';
+
+                    if (keyData.whitelisted) {
+                        type = 'whitelist';
+                        note = '🌟 ' + note;
+                    }
+
+                    setKey(keyData.key, expireText, note, type);
+                    setStatus('✅ Key ready', 'online');
+
+                    if (data.message && data.message.includes('already exists')) {
+                        setStatus('ℹ️ Key already exists for this IP', 'online');
+                    }
+                } else {
+                    throw new Error(data.message || 'Cannot get key');
+                }
+            } catch (error) {
+                console.error('Failed to get key:', error);
+                setError(error.message);
+                setStatus('❌ ' + error.message, 'error');
+            } finally {
+                getKeyBtn.textContent = '🚀 Get Key';
+                getKeyBtn.disabled = false;
+            }
+        }
+
+        // ================================================================
+        // AUTO CHECK IP CHANGE
+        // ================================================================
+        async function checkIPChanged() {
+            try {
+                const ipUrl = getIPUrl();
+                const response = await fetch(ipUrl);
+                const ip = await response.text();
+                const newIP = ip.trim();
+                
+                if (lastCheckedIP && lastCheckedIP !== newIP) {
+                    if (SETTINGS.DEBUG) console.log(`🔄 IP change detected: ${lastCheckedIP} → ${newIP}`);
+                    setIP(newIP, true);
+                    lastCheckedIP = newIP;
+                    currentAccessKey = '';
+                    setStatus('🔄 IP changed, getting new key...', 'loading');
+                    await fetchAccessKey();
+                    if (currentAccessKey) {
+                        await fetchKey();
+                    }
+                }
+            } catch (error) {
+                console.error('IP check failed:', error);
+            }
+        }
+
+        // ================================================================
+        // EVENTS
+        // ================================================================
+        getKeyBtn.addEventListener('click', () => fetchKey(true));
+
+        refreshBtn.addEventListener('click', async () => {
+            setStatus('Refreshing...', 'loading');
+            currentAccessKey = '';
+            lastCheckedIP = '';
+            await fetchIP(true);
+            await fetchAccessKey();
+            await fetchKey();
+            setStatus('✅ Refreshed', 'online');
+        });
+
+        // ================================================================
+        // INIT
+        // ================================================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            setStatus('Initializing...', 'loading');
+            
+            await fetchIP(true);
+            await fetchAccessKey();
+            await fetchKey();
+            
+            setInterval(checkIPChanged, CHECK_INTERVAL);
+            if (SETTINGS.DEBUG) {
+                console.log('🔄 Auto IP check every', SETTINGS.CHECK_INTERVAL, 'seconds');
+                console.log('🔑 Access key length: 80 chars + timestamp');
+            }
+        });
+
+        // ================================================================
+        // KEYBOARD SHORTCUTS
+        // ================================================================
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                fetchKey(true);
+            }
+            if (e.key === 'r' || e.key === 'R') {
+                if (!e.ctrlKey && !e.metaKey) {
+                    e.preventDefault();
+                    refreshBtn.click();
+                }
+            }
+        });
+
+        console.log('🚀 AuraHub Key Manager ready!');
+        console.log(`📡 API: ${API_BASE}`);
+        console.log('💡 Ctrl+Enter to get key, R to refresh');
+        console.log('🔒 Anti-DevTools: Instant detection (200ms)');
+        console.log('🔒 View-Source: Blocked');
+        console.log('🔒 Only accepts redirect from onthitracnghiem.com');
+    </script>
+
+</body>
+</html>
